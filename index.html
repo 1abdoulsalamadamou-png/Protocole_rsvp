@@ -3,173 +3,626 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Direction du Protocole d'État</title>
+
+  <title>Direction du Protocole d'État | Niger</title>
 
   <style>
     * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
 
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
       background: #f7f7f7;
       color: #333;
+      line-height: 1.6;
     }
 
+    /* BARRE NATIONALE */
+    .national-bar {
+      height: 8px;
+      background: linear-gradient(
+        to right,
+        #e87722 0%,
+        #e87722 33.33%,
+        #ffffff 33.33%,
+        #ffffff 66.66%,
+        #009639 66.66%,
+        #009639 100%
+      );
+    }
+
+    /* EN-TÊTE */
     header {
-      background: white;
-      padding: 20px;
-      text-align: center;
-      border-top: 8px solid #e87722;
-      border-bottom: 8px solid #009639;
+      background: #ffffff;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .header-container {
+      max-width: 1150px;
+      margin: auto;
+      padding: 18px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
     }
 
     .logos {
       display: flex;
-      justify-content: center;
       align-items: center;
-      gap: 25px;
-      flex-wrap: wrap;
+      gap: 18px;
     }
 
     .logos img {
-      max-width: 180px;
-      max-height: 110px;
+      width: auto;
+      height: 85px;
+      max-width: 170px;
       object-fit: contain;
     }
 
-    h1 {
-      margin: 18px 0 5px;
-      font-size: 25px;
+    .institution {
+      flex: 1;
+    }
+
+    .institution h1 {
+      font-size: 21px;
       color: #333;
+      margin-bottom: 4px;
     }
 
-    .subtitle {
-      margin: 0;
+    .institution p {
       color: #666;
-      font-size: 15px;
+      font-size: 14px;
     }
 
-    .orange {
-      height: 5px;
-      background: #e87722;
-    }
-
-    .green {
-      height: 5px;
+    /* NAVIGATION */
+    nav {
       background: #009639;
     }
 
-    main {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 0 20px;
+    .nav-container {
+      max-width: 1150px;
+      margin: auto;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
-    .welcome {
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 14px 22px;
+      font-size: 14px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      background: #e87722;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 430px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      padding: 60px 20px;
+      background:
+        linear-gradient(
+          rgba(0, 150, 57, 0.88),
+          rgba(0, 150, 57, 0.88)
+        );
+      color: white;
     }
 
-    .welcome h2 {
-      color: #009639;
-      margin-top: 0;
+    .hero-content {
+      max-width: 850px;
     }
 
-    .buttons {
+    .hero h2 {
+      font-size: 40px;
+      margin-bottom: 18px;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 18px;
+      max-width: 720px;
+      margin: auto;
+      opacity: 0.96;
+    }
+
+    .hero-buttons {
+      margin-top: 30px;
       display: flex;
       justify-content: center;
       gap: 15px;
       flex-wrap: wrap;
-      margin-top: 25px;
     }
 
-    .button {
+    .btn {
       display: inline-block;
-      padding: 13px 25px;
-      border-radius: 7px;
+      padding: 14px 25px;
+      border-radius: 6px;
       text-decoration: none;
-      color: white;
       font-weight: bold;
-      background: #009639;
+      transition: 0.3s;
     }
 
-    .button.orange {
+    .btn-orange {
       background: #e87722;
+      color: white;
     }
 
-    footer {
-      margin-top: 50px;
-      background: #333;
-      color: white;
+    .btn-orange:hover {
+      background: #cf6415;
+    }
+
+    .btn-white {
+      background: white;
+      color: #009639;
+    }
+
+    .btn-white:hover {
+      background: #eeeeee;
+    }
+
+    /* SECTION */
+    section {
+      padding: 60px 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .section-title {
       text-align: center;
-      padding: 20px;
-      font-size: 13px;
+      margin-bottom: 40px;
+    }
+
+    .section-title h2 {
+      color: #009639;
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .section-title p {
+      color: #777;
+    }
+
+    /* PRESENTATION */
+    .presentation {
+      background: white;
+    }
+
+    .presentation-content {
+      max-width: 900px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .presentation-content p {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 15px;
+    }
+
+    /* CARTES */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+    }
+
+    .card {
+      background: white;
+      padding: 30px 25px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.07);
+      border-top: 4px solid #009639;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-icon {
+      font-size: 38px;
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      color: #333;
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* DEMANDE */
+    .request {
+      background: #f1f7f3;
+      text-align: center;
+    }
+
+    .request-box {
+      max-width: 850px;
+      margin: auto;
+    }
+
+    .request h2 {
+      color: #009639;
+      margin-bottom: 15px;
+    }
+
+    .request p {
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #222;
+      color: white;
+      padding: 35px 20px 20px;
+    }
+
+    .footer-container {
+      max-width: 1100px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 35px;
+    }
+
+    footer h3 {
+      margin-bottom: 12px;
+      color: #e87722;
+    }
+
+    footer p,
+    footer a {
+      color: #ccc;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    footer a {
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .copyright {
+      max-width: 1100px;
+      margin: 30px auto 0;
+      padding-top: 15px;
+      border-top: 1px solid #444;
+      text-align: center;
+      color: #aaa;
+      font-size: 12px;
+    }
+
+    /* MOBILE */
+    @media (max-width: 800px) {
+
+      .header-container {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .logos {
+        justify-content: center;
+      }
+
+      .logos img {
+        height: 70px;
+        max-width: 140px;
+      }
+
+      .institution h1 {
+        font-size: 18px;
+      }
+
+      nav a {
+        padding: 11px 12px;
+        font-size: 13px;
+      }
+
+      .hero {
+        min-height: 400px;
+      }
+
+      .hero h2 {
+        font-size: 30px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <div class="orange"></div>
+  <div class="national-bar"></div>
 
+  <!-- EN-TÊTE -->
   <header>
+    <div class="header-container">
 
-    <div class="logos">
+      <div class="logos">
 
-      <img src="FB_IMG_1789383660052.jpg" alt="Logo du Ministère">
+        <img
+          src="FB_IMG_1789383660052.jpg"
+          alt="Logo du Ministère">
 
-      <img src="file_000000000b3081f498646eaa39cfe4b7.png" alt="Logo de la Direction du Protocole d'État">
+        <img
+          src="file_000000000b3081f498646eaa39cfe4b7.png"
+          alt="Logo de la Direction du Protocole d'État">
+
+      </div>
+
+      <div class="institution">
+        <h1>Direction du Protocole d'État</h1>
+
+        <p>
+          Ministère des Affaires Étrangères,
+          de la Coopération et des Nigériens à l'Extérieur
+        </p>
+      </div>
 
     </div>
-
-    <h1>Direction du Protocole d'État</h1>
-
-    <p class="subtitle">
-      Ministère des Affaires Étrangères, de la Coopération et des Nigériens à l'Extérieur
-    </p>
-
   </header>
 
-  <div class="green"></div>
 
-  <main>
+  <!-- MENU -->
+  <nav>
+    <div class="nav-container">
 
-    <section class="welcome">
+      <a href="#accueil">Accueil</a>
+      <a href="#direction">La Direction</a>
+      <a href="#services">Services</a>
+      <a href="#evenements">Événements</a>
+      <a href="#contact">Contact</a>
 
-      <h2>Bienvenue</h2>
+    </div>
+  </nav>
+
+
+  <!-- ACCUEIL -->
+  <section class="hero" id="accueil">
+
+    <div class="hero-content">
+
+      <h2>
+        Bienvenue à la Direction du Protocole d'État
+      </h2>
 
       <p>
-        Plateforme de la Direction du Protocole d'État.
+        Au service du protocole officiel, de l'accueil
+        des délégations et de l'organisation des
+        événements diplomatiques de la République du Niger.
       </p>
 
-      <p>
-        Gestion et organisation des activités protocolaires,
-        des délégations officielles et des événements diplomatiques.
-      </p>
+      <div class="hero-buttons">
 
-      <div class="buttons">
-
-        <a href="#" class="button">
-          Accueil
+        <a href="#services" class="btn btn-orange">
+          Découvrir nos services
         </a>
 
-        <a href="#" class="button orange">
-          Services
+        <a href="#contact" class="btn btn-white">
+          Nous contacter
         </a>
 
       </div>
 
-    </section>
+    </div>
 
-  </main>
+  </section>
 
-  <footer>
-    © Direction du Protocole d'État — République du Niger
+
+  <!-- PRÉSENTATION -->
+  <section class="presentation" id="direction">
+
+    <div class="container">
+
+      <div class="section-title">
+
+        <h2>La Direction du Protocole d'État</h2>
+
+        <p>
+          Une mission au cœur de l'activité officielle et diplomatique.
+        </p>
+
+      </div>
+
+      <div class="presentation-content">
+
+        <p>
+          La Direction du Protocole d'État assure les missions
+          protocolaires liées aux activités officielles de l'État,
+          aux visites des personnalités et délégations étrangères
+          ainsi qu'aux cérémonies officielles.
+        </p>
+
+        <p>
+          Elle veille au respect des usages protocolaires,
+          des règles de préséance et du cérémonial officiel,
+          en contribuant au bon déroulement des rencontres
+          et événements à caractère diplomatique.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- SERVICES -->
+  <section id="services">
+
+    <div class="container">
+
+      <div class="section-title">
+
+        <h2>Nos principaux services</h2>
+
+        <p>
+          Un accompagnement professionnel des activités protocolaires.
+        </p>
+
+      </div>
+
+      <div class="cards">
+
+        <div class="card">
+
+          <div class="card-icon">🏛️</div>
+
+          <h3>Protocole diplomatique</h3>
+
+          <p>
+            Organisation et accompagnement des activités
+            protocolaires officielles et diplomatiques.
+          </p>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="card-icon">🤝</div>
+
+          <h3>Délégations officielles</h3>
+
+          <p>
+            Accueil, accompagnement et coordination
+            des délégations et personnalités officielles.
+          </p>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="card-icon">🎖️</div>
+
+          <h3>Cérémonial officiel</h3>
+
+          <p>
+            Mise en œuvre du cérémonial, de la préséance
+            et des usages lors des événements officiels.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- DEMANDE -->
+  <section class="request" id="evenements">
+
+    <div class="container">
+
+      <div class="request-box">
+
+        <h2>Besoin d'une prise en charge protocolaire ?</h2>
+
+        <p>
+          Une plateforme dédiée sera prochainement disponible
+          pour faciliter les demandes relatives aux activités
+          protocolaires et aux événements officiels.
+        </p>
+
+        <a href="#contact" class="btn btn-orange">
+          Faire une demande
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PIED DE PAGE -->
+  <footer id="contact">
+
+    <div class="footer-container">
+
+      <div>
+
+        <h3>Direction du Protocole d'État</h3>
+
+        <p>
+          Ministère des Affaires Étrangères,
+          de la Coopération et des Nigériens à l'Extérieur
+        </p>
+
+      </div>
+
+
+      <div>
+
+        <h3>Navigation</h3>
+
+        <a href="#accueil">Accueil</a>
+        <a href="#direction">La Direction</a>
+        <a href="#services">Services</a>
+        <a href="#evenements">Événements</a>
+
+      </div>
+
+
+      <div>
+
+        <h3>Contact</h3>
+
+        <p>
+          Niamey, République du Niger
+        </p>
+
+        <p>
+          Direction du Protocole d'État
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+      © Direction du Protocole d'État — République du Niger
+
+    </div>
+
   </footer>
 
 </body>

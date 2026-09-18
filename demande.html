@@ -645,6 +645,54 @@
     </p>
 
   </footer>
+<script>
+const form = document.querySelector("form");
 
+form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    const demande = {
+        nom_prenom: formData.get("nom_prenom"),
+        fonction: formData.get("fonction"),
+        institution: formData.get("institution"),
+        pays: formData.get("pays"),
+        type_delegation: formData.get("type_delegation"),
+        nombre_personnes: formData.get("nombre_personnes") || null,
+        date_arrivee: formData.get("date_arrivee"),
+        heure_arrivee: formData.get("heure_arrivee") || null,
+        numero_vol_arrivee: formData.get("numero_vol_arrivee"),
+        lieu_arrivee: formData.get("lieu_arrivee"),
+        date_depart: formData.get("date_depart") || null,
+        heure_depart: formData.get("heure_depart") || null,
+        numero_vol_depart: formData.get("numero_vol_depart"),
+        hotel_lieu: formData.get("hotel_lieu"),
+        informations_complementaires: formData.get("informations_complementaires")
+    };
+
+    const response = await fetch(
+        "https://vaszyhzgvtildxuxymcf.supabase.co/rest/v1/demandes_protocolaires",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "apikey": "sb_publishable_-2duftCVjNXzKUqL8DoYNg_L0GDnC6m",
+                "Authorization": "sb_publishable_-2duftCVjNXzKUqL8DoYNg_L0GDnC6m",
+                "Prefer": "return=minimal"
+            },
+            body: JSON.stringify(demande)
+        }
+    );
+
+    if (response.ok) {
+        alert("Votre demande a été envoyée avec succès.");
+        form.reset();
+    } else {
+        alert("Une erreur est survenue. Veuillez réessayer.");
+        console.error(await response.text());
+    }
+});
+</script>
 </body>
 </html>

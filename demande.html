@@ -688,8 +688,8 @@ form.addEventListener("submit", async function(e) {
     if (response.ok) {
         alert("Votre demande a été envoyée avec succès.");
         form.reset();
-    } else {
-        alert("Une erreur est survenue. Veuillez réessayer.");
+    } else alert("Erreur Supabase : " + await response.text());
+        alert 
         console.error(await response.text());
     }
 });

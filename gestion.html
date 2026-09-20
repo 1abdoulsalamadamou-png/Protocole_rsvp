@@ -181,17 +181,7 @@ th, td {
     );
 
     if (reponse.ok) {
-      alert("Cérémonie ajoutée avec succès !");
-      function genererQR(id) {
-  const url = window.location.origin +
-    "/Protocole_rsvp/confirmation.html?id=" + id;
-
-  window.open(
-    "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
-    encodeURIComponent(url),
-    "_blank"
-  );
-      }
+      alert("Cérémonie ajoutée avec succès !")
       chargerCeremonies();
     } else {
       alert("Erreur lors de l'ajout de la cérémonie.");

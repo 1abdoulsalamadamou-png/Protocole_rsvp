@@ -199,7 +199,13 @@
         return;
       }
 
-      alert("Votre confirmation a été enregistrée avec succès.");
+      document.body.innerHTML = `
+  <div style="text-align:center; padding:50px 20px;">
+    <h2>✅ Confirmation enregistrée</h2>
+    <p>Votre confirmation a bien été enregistrée.</p>
+    <p>Merci pour votre réponse.</p>
+  </div>
+`;
 
     } catch (erreur) {
 

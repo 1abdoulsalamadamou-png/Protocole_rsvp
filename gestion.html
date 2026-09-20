@@ -155,7 +155,7 @@
     const lieu = document.getElementById("lieu").value;
 
     const reponse = await fetch(
-      SUPABASE_URL + "/rest/v1/demandes_protocolaires",
+      SUPABASE_URL + "/rest/v1/cérémonies",
       {
         method: "POST",
 
@@ -188,7 +188,7 @@
 
     const reponse = await fetch(
       SUPABASE_URL +
-      "/rest/v1/demandes_protocolaires?select=*&order=date_ceremonie.asc",
+      "/rest/v1/cérémonies?select=*&order=date_ceremonie.asc",
       {
         headers: {
           "apikey": SUPABASE_KEY,

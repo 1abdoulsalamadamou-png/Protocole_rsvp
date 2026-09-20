@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmation de présence | Protocole d'État</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    .header {
+      background: linear-gradient(
+        to right,
+        #e87500 0%,
+        #e87500 33%,
+        #ffffff 33%,
+        #ffffff 67%,
+        #00843d 67%,
+        #00843d 100%
+      );
+      padding: 8px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+    }
+
+    h1 {
+      text-align: center;
+      color: #e87500;
+      font-size: 24px;
+    }
+
+    .info {
+      background: #f7f7f7;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 13px;
+      border: none;
+      border-radius: 6px;
+      background: #e87500;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header"></div>
+
+  <div class="container">
+
+    <h1>Confirmation de présence</h1>
+
+    <div class="info">
+      <strong>Protocole d'État</strong><br>
+      Ministère des Affaires Étrangères, de la Coopération
+      et des Nigériens à l'Extérieur
+    </div>
+
+    <label for="nom">Nom et prénom</label>
+    <input
+      type="text"
+      id="nom"
+      placeholder="Votre nom et prénom"
+    >
+
+    <label for="fonction">Fonction</label>
+    <input
+      type="text"
+      id="fonction"
+      placeholder="Votre fonction"
+    >
+
+    <label for="institution">Institution / Organisation</label>
+    <input
+      type="text"
+      id="institution"
+      placeholder="Votre institution"
+    >
+
+    <label for="presence">Confirmation de présence</label>
+    <select id="presence">
+      <option value="">-- Sélectionner --</option>
+      <option value="Confirme">Je confirme ma présence</option>
+      <option value="Ne_participe_pas">Je ne pourrai pas participer</option>
+    </select>
+
+    <button onclick="confirmerPresence()">
+      Confirmer
+    </button>
+
+    <div class="footer">
+      Direction du Protocole d'État
+    </div>
+
+  </div>
+
+  <script>
+
+    function confirmerPresence() {
+
+      const nom = document.getElementById("nom").value.trim();
+      const fonction = document.getElementById("fonction").value.trim();
+      const institution = document.getElementById("institution").value.trim();
+      const presence = document.getElementById("presence").value;
+
+      if (!nom || !fonction || !institution || !presence) {
+        alert("Veuillez remplir tous les champs.");
+        return;
+      }
+
+      alert("Votre confirmation a été enregistrée avec succès.");
+
+    }
+
+  </script>
+
+</body>
+      </html>

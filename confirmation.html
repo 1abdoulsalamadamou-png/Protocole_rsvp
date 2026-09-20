@@ -144,23 +144,72 @@
 
   <script>
 
-    function confirmerPresence() {
+  const SUPABASE_URL = "https://vaszyhzgvtildxuxymcf.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_-2duftCVjNXzKUqL8DoYNg_L0GDnC6m";
 
-      const nom = document.getElementById("nom").value.trim();
-      const fonction = document.getElementById("fonction").value.trim();
-      const institution = document.getElementById("institution").value.trim();
-      const presence = document.getElementById("presence").value;
+  // Récupérer l'identifiant de la cérémonie dans le QR Code
+  const params = new URLSearchParams(window.location.search);
+  const ceremonieId = params.get("id");
 
-      if (!nom || !fonction || !institution || !presence) {
-        alert("Veuillez remplir tous les champs.");
+  async function confirmerPresence() {
+
+    const nom = document.getElementById("nom").value.trim();
+    const fonction = document.getElementById("fonction").value.trim();
+    const institution = document.getElementById("institution").value.trim();
+    const presence = document.getElementById("presence").value;
+
+    if (!nom || !fonction || !institution || !presence) {
+      alert("Veuillez remplir tous les champs.");
+      return;
+    }
+
+    if (!ceremonieId) {
+      alert("Erreur : cérémonie introuvable.");
+      return;
+    }
+
+    try {
+
+      const reponse = await fetch(
+        SUPABASE_URL + "/rest/v1/confirmations",
+        {
+          method: "POST",
+
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + SUPABASE_KEY,
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal"
+          },
+
+          body: JSON.stringify({
+            ceremonie_id: ceremonieId,
+            nom_prenom: nom,
+            fonction: fonction,
+            institution: institution,
+            presence: presence
+          })
+        }
+      );
+
+      if (!reponse.ok) {
+        const erreur = await reponse.text();
+        console.error(erreur);
+        alert("Erreur lors de l'enregistrement de votre confirmation.");
         return;
       }
 
       alert("Votre confirmation a été enregistrée avec succès.");
 
+    } catch (erreur) {
+
+      console.error(erreur);
+      alert("Une erreur de connexion est survenue.");
+
     }
 
-  </script>
+  }
 
+  </script>
 </body>
       </html>

@@ -1,1 +1,227 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion des invitations | Protocole d'État</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(90deg, #e87500, #ffffff, #00853f);
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background: #e87500;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #f0f0f0;
+    }
+
+    .qr {
+      font-size: 24px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Gestion des invitations</h1>
+  <p>Direction du Protocole d'État</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>Créer une cérémonie</h2>
+
+    <label>Nom de la cérémonie</label>
+    <input type="text" id="nom_ceremonie">
+
+    <label>Titre</label>
+    <input type="text" id="titre">
+
+    <label>Date</label>
+    <input type="date" id="date_ceremonie">
+
+    <label>Heure</label>
+    <input type="time" id="heure_ceremonie">
+
+    <label>Lieu</label>
+    <input type="text" id="lieu">
+
+    <button onclick="ajouterCeremonie()">
+      Ajouter la cérémonie
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>Cérémonies enregistrées</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Date</th>
+          <th>Heure</th>
+          <th>Lieu</th>
+          <th>Statut</th>
+          <th>QR</th>
+        </tr>
+      </thead>
+
+      <tbody id="listeCeremonies">
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+  const SUPABASE_URL = "https://vaszyhzgvtildxuxymcf.supabase.co";
+
+  const SUPABASE_KEY = "sb_publishable_-2duftCVjNXzKUqL8DoYNg_L0GDnC6m";
+
+  async function ajouterCeremonie() {
+
+    const nom = document.getElementById("nom_ceremonie").value;
+    const titre = document.getElementById("titre").value;
+    const date = document.getElementById("date_ceremonie").value;
+    const heure = document.getElementById("heure_ceremonie").value;
+    const lieu = document.getElementById("lieu").value;
+
+    const reponse = await fetch(
+      SUPABASE_URL + "/rest/v1/demandes_protocolaires",
+      {
+        method: "POST",
+
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+
+        body: JSON.stringify({
+          nom_ceremonie: nom,
+          titre: titre,
+          date_ceremonie: date,
+          heure_ceremonie: heure,
+          lieu: lieu
+        })
+      }
+    );
+
+    if (reponse.ok) {
+      alert("Cérémonie ajoutée avec succès !");
+      chargerCeremonies();
+    } else {
+      alert("Erreur lors de l'ajout de la cérémonie.");
+    }
+  }
+
+  async function chargerCeremonies() {
+
+    const reponse = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/demandes_protocolaires?select=*&order=date_ceremonie.asc",
+      {
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY
+        }
+      }
+    );
+
+    const donnees = await reponse.json();
+
+    const liste = document.getElementById("listeCeremonies");
+
+    liste.innerHTML = "";
+
+    donnees.forEach(ceremonie => {
+
+      const ligne = document.createElement("tr");
+
+      ligne.innerHTML = `
+        <td>${ceremonie.nom_ceremonie || ""}</td>
+        <td>${ceremonie.date_ceremonie || ""}</td>
+        <td>${ceremonie.heure_ceremonie || ""}</td>
+        <td>${ceremonie.lieu || ""}</td>
+        <td>${ceremonie.statut || "Nouvelle"}</td>
+        <td class="qr">🔳</td>
+      `;
+
+      liste.appendChild(ligne);
+    });
+  }
+
+  chargerCeremonies();
+</script>
+
+</body>
+</html>

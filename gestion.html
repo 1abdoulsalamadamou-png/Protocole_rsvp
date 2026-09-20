@@ -182,6 +182,55 @@ th, td {
 
     if (reponse.ok) {
       alert("Cérémonie ajoutée avec succès !");
+      async function voirConfirmations(id) {
+
+  const url = SUPABASE_URL +
+    "/rest/v1/confirmations?select=*&ceremonie_id=eq." + id +
+    "&order=created_at.desc";
+
+  try {
+
+    const reponse = await fetch(url, {
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + SUPABASE_KEY
+      }
+    });
+
+    if (!reponse.ok) {
+      alert("Erreur lors du chargement des confirmations.");
+      return;
+    }
+
+    const confirmations = await reponse.json();
+
+    if (confirmations.length === 0) {
+      alert("Aucune confirmation pour cette cérémonie.");
+      return;
+    }
+
+    let message = "CONFIRMATIONS\\n\\n";
+
+    confirmations.forEach((confirmation, index) => {
+
+      message +=
+        (index + 1) + ". " +
+        confirmation.nom_prenom + "\\n" +
+        "Fonction : " + confirmation.fonction + "\\n" +
+        "Institution : " + confirmation.institution + "\\n" +
+        "Présence : " + confirmation.presence + "\\n\\n";
+
+    });
+
+    alert(message);
+
+  } catch (erreur) {
+
+    console.error(erreur);
+    alert("Une erreur de connexion est survenue.");
+
+  }
+      }
       chargerCeremonies();
     } else {
       alert("Erreur lors de l'ajout de la cérémonie.");
@@ -224,6 +273,11 @@ th, td {
         <td>${ceremonie.statut || "Nouvelle"}</td>
         <td class="qr">
   <button onclick="genererQR('${ceremonie.id}')">QR</button>
+</td>
+<td>
+  <button onclick="voirConfirmations('${ceremonie.id}')">
+    Confirmations
+  </button>
 </td>
       `;
 

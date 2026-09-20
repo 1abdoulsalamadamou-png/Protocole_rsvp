@@ -223,7 +223,6 @@ th, td {
         <td>${ceremonie.lieu || ""}</td>
         <td>${ceremonie.statut || "Nouvelle"}</td>
         <td class="qr">
-  <td class="qr">
   <button onclick="genererQR('${ceremonie.id}')">QR</button>
 </td>
       `;
@@ -231,7 +230,16 @@ th, td {
       liste.appendChild(ligne);
     });
   }
+  function genererQR(id) {
+    const url = window.location.origin +
+      "/Protocole_rsvp/confirmation.html?id=" + id;
 
+    window.open(
+      "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
+      encodeURIComponent(url),
+      "_blank"
+    );
+  }
   chargerCeremonies();
 </script>
 

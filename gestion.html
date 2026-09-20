@@ -197,6 +197,11 @@
         }
       }
     );
+    if (!reponse.ok) {
+  const erreur = await reponse.text();
+  alert("Erreur Supabase : " + erreur);
+  return;
+    }
 
     const donnees = await reponse.json();
 

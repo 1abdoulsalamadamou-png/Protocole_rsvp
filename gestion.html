@@ -77,8 +77,12 @@ th, td {
   border-bottom: 1px solid #ddd;
   padding: 12px;
   text-align: left;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  white-space: nowrap;
+}
+    .table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
     }
 
     th {

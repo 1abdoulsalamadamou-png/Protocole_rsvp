@@ -151,46 +151,56 @@ th, td {
 </div>
 
 <script>
-  const SUPABASE_URL = "https://vaszyhzgvtildxuxymcf.supabase.co";
 
-  const SUPABASE_KEY = "sb_publishable_-2duftCVjNXzKUqL8DoYNg_L0GDnC6m";
+async function ajouterCeremonie() {
 
-  async function ajouterCeremonie() {
+  const nom = document.getElementById("nom_ceremonie").value;
+  const titre = document.getElementById("titre").value;
+  const date = document.getElementById("date_ceremonie").value;
+  const heure = document.getElementById("heure_ceremonie").value;
+  const lieu = document.getElementById("lieu").value;
 
-    const nom = document.getElementById("nom_ceremonie").value;
-    const titre = document.getElementById("titre").value;
-    const date = document.getElementById("date_ceremonie").value;
-    const heure = document.getElementById("heure_ceremonie").value;
-    const lieu = document.getElementById("lieu").value;
+  const reponse = await fetch(
+    SUPABASE_URL + "/rest/v1/ceremonies",
+    {
+      method: "POST",
 
-    const reponse = await fetch(
-      SUPABASE_URL + "/rest/v1/ceremonies",
-      {
-        method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + SUPABASE_KEY,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      },
 
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": "Bearer " + SUPABASE_KEY,
-          "Content-Type": "application/json",
-          "Prefer": "return=minimal"
-        },
+      body: JSON.stringify({
+        nom_ceremonie: nom,
+        titre: titre,
+        date_ceremonie: date,
+        heure_ceremonie: heure,
+        lieu: lieu
+      })
+    }
+  );
 
-        body: JSON.stringify({
-          nom_ceremonie: nom,
-          titre: titre,
-          date_ceremonie: date,
-          heure_ceremonie: heure,
-          lieu: lieu
-        })
-      }
-    );
+  if (reponse.ok) {
+    alert("Cérémonie ajoutée avec succès !");
+    chargerCeremonies();
+  } else {
+    const erreur = await reponse.text();
+    alert("Erreur lors de l'ajout de la cérémonie : " + erreur);
+  }
+}
 
-    if (reponse.ok) {
-      alert("Cérémonie ajoutée avec succès !");
-      async function voirConfirmations(id) {
+
+/* ================================
+   AFFICHER LES CONFIRMATIONS
+   ================================ */
+
+async function voirConfirmations(id) {
 
   const url = SUPABASE_URL +
-    "/rest/v1/confirmations?select=*&ceremonie_id=eq." + id +
+    "/rest/v1/confirmations?select=*&ceremonie_id=eq." +
+    id +
     "&order=created_at.desc";
 
   try {
@@ -203,6 +213,8 @@ th, td {
     });
 
     if (!reponse.ok) {
+      const erreur = await reponse.text();
+      console.error(erreur);
       alert("Erreur lors du chargement des confirmations.");
       return;
     }
@@ -214,16 +226,16 @@ th, td {
       return;
     }
 
-    let message = "CONFIRMATIONS\\n\\n";
+    let message = "CONFIRMATIONS\n\n";
 
     confirmations.forEach((confirmation, index) => {
 
       message +=
         (index + 1) + ". " +
-        confirmation.nom_prenom + "\\n" +
-        "Fonction : " + confirmation.fonction + "\\n" +
-        "Institution : " + confirmation.institution + "\\n" +
-        "Présence : " + confirmation.presence + "\\n\\n";
+        (confirmation.nom_prenom || "") + "\n" +
+        "Fonction : " + (confirmation.fonction || "") + "\n" +
+        "Institution : " + (confirmation.institution || "") + "\n" +
+        "Présence : " + (confirmation.presence || "") + "\n\n";
 
     });
 
@@ -235,72 +247,91 @@ th, td {
     alert("Une erreur de connexion est survenue.");
 
   }
+}
+
+
+/* ================================
+   CHARGER LES CÉRÉMONIES
+   ================================ */
+
+async function chargerCeremonies() {
+
+  const reponse = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/ceremonies?select=*&order=date_ceremonie.asc",
+    {
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + SUPABASE_KEY
       }
-      chargerCeremonies();
-    } else {
-      alert("Erreur lors de l'ajout de la cérémonie.");
     }
+  );
+
+  if (!reponse.ok) {
+    const erreur = await reponse.text();
+    alert("Erreur Supabase : " + erreur);
+    return;
   }
 
-  async function chargerCeremonies() {
+  const donnees = await reponse.json();
 
-    const reponse = await fetch(
-      SUPABASE_URL +
-"/rest/v1/ceremonies?select=*&order=date_ceremonie.asc",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": "Bearer " + SUPABASE_KEY
-        }
-      }
-    );
-    if (!reponse.ok) {
-  const erreur = await reponse.text();
-  alert("Erreur Supabase : " + erreur);
-  return;
-    }
+  const liste = document.getElementById("listeCeremonies");
 
-    const donnees = await reponse.json();
+  liste.innerHTML = "";
 
-    const liste = document.getElementById("listeCeremonies");
+  donnees.forEach(ceremonie => {
 
-    liste.innerHTML = "";
+    const ligne = document.createElement("tr");
 
-    donnees.forEach(ceremonie => {
+    ligne.innerHTML = `
+      <td>${ceremonie.nom_ceremonie || ""}</td>
+      <td>${ceremonie.date_ceremonie || ""}</td>
+      <td>${ceremonie.heure_ceremonie || ""}</td>
+      <td>${ceremonie.lieu || ""}</td>
+      <td>${ceremonie.statut || "Nouvelle"}</td>
 
-      const ligne = document.createElement("tr");
+      <td class="qr">
+        <button onclick="genererQR('${ceremonie.id}')">
+          QR
+        </button>
+      </td>
 
-      ligne.innerHTML = `
-        <td>${ceremonie.nom_ceremonie || ""}</td>
-        <td>${ceremonie.date_ceremonie || ""}</td>
-        <td>${ceremonie.heure_ceremonie || ""}</td>
-        <td>${ceremonie.lieu || ""}</td>
-        <td>${ceremonie.statut || "Nouvelle"}</td>
-        <td class="qr">
-  <button onclick="genererQR('${ceremonie.id}')">QR</button>
-</td>
-<td>
-  <button onclick="voirConfirmations('${ceremonie.id}')">
-    Confirmations
-  </button>
-</td>
-      `;
+      <td>
+        <button onclick="voirConfirmations('${ceremonie.id}')">
+          Confirmations
+        </button>
+      </td>
+    `;
 
-      liste.appendChild(ligne);
-    });
-  }
-  function genererQR(id) {
-    const url = window.location.origin +
-      "/Protocole_rsvp/confirmation.html?id=" + id;
+    liste.appendChild(ligne);
 
-    window.open(
-      "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
-      encodeURIComponent(url),
-      "_blank"
-    );
-  }
-  chargerCeremonies();
-</script>
+  });
+}
 
+
+/* ================================
+   GÉNÉRER LE QR CODE
+   ================================ */
+
+function genererQR(id) {
+
+  const url = window.location.origin +
+    "/Protocole_rsvp/confirmation.html?id=" + id;
+
+  window.open(
+    "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
+    encodeURIComponent(url),
+    "_blank"
+  );
+}
+
+
+/* ================================
+   CHARGEMENT INITIAL
+   ================================ */
+
+chargerCeremonies();
+
+      </script>
 </body>
 </html>

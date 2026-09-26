@@ -460,18 +460,13 @@
 
 <!-- MODALE CONFIRMATIONS -->
 
-<div
-  id="confirmationsModal"
-  class="modal"
->
+<div id="confirmationsModal" class="modal">
 
   <div class="modal-content">
 
     <div class="modal-header">
 
-      <h2>
-        Confirmations
-      </h2>
+      <h2>Confirmations</h2>
 
       <button
         class="close"
@@ -482,7 +477,109 @@
 
     </div>
 
+    <!-- INFORMATIONS DE LA CÉRÉMONIE -->
+
     <div id="confirmationTitre"></div>
+
+    <!-- STATISTIQUES -->
+
+    <div
+      id="confirmationStats"
+      style="
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:10px;
+        margin:15px 0;
+      "
+    >
+
+      <div
+        style="
+          background:#f3f3f3;
+          padding:15px;
+          border-radius:8px;
+          text-align:center;
+        "
+      >
+        <strong
+          id="totalConfirmations"
+          style="font-size:24px;"
+        >
+          0
+        </strong>
+
+        <br>
+
+        Total
+      </div>
+
+
+      <div
+        style="
+          background:#e0f5e8;
+          padding:15px;
+          border-radius:8px;
+          text-align:center;
+        "
+      >
+        <strong
+          id="totalPresents"
+          style="font-size:24px;"
+        >
+          0
+        </strong>
+
+        <br>
+
+        Présents
+      </div>
+
+
+      <div
+        style="
+          background:#ffe5e5;
+          padding:15px;
+          border-radius:8px;
+          text-align:center;
+        "
+      >
+        <strong
+          id="totalAbsents"
+          style="font-size:24px;"
+        >
+          0
+        </strong>
+
+        <br>
+
+        Absents
+      </div>
+
+    </div>
+
+
+    <!-- RECHERCHE -->
+
+    <div style="margin-bottom:15px;">
+
+      <input
+        type="text"
+        id="rechercheConfirmation"
+        placeholder="🔎 Rechercher par nom, fonction ou institution..."
+        style="
+          width:100%;
+          padding:12px;
+          border:1px solid #ccc;
+          border-radius:6px;
+          font-size:15px;
+        "
+        oninput="filtrerConfirmations()"
+      >
+
+    </div>
+
+
+    <!-- TABLEAU -->
 
     <div class="table-container">
 
@@ -491,16 +588,24 @@
         <thead>
 
           <tr>
+
             <th>Nom</th>
+
             <th>Fonction</th>
+
             <th>Institution</th>
+
             <th>Présence</th>
+
             <th>Date de confirmation</th>
+
           </tr>
 
         </thead>
 
-        <tbody id="confirmationsBody"></tbody>
+        <tbody id="confirmationsBody">
+
+        </tbody>
 
       </table>
 
@@ -509,9 +614,6 @@
   </div>
 
 </div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 

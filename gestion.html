@@ -127,15 +127,17 @@
       color: white;
     }
 
+    .btn-red {
+      background: #c62828;
+      color: white;
+    }
+
     .btn-gray {
       background: #666;
       color: white;
     }
 
-    .btn-orange:hover,
-    .btn-green:hover,
-    .btn-blue:hover,
-    .btn-gray:hover {
+    button:hover {
       opacity: 0.85;
     }
 
@@ -165,13 +167,12 @@
     .table-container {
       width: 100%;
       overflow-x: auto;
-      overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
     }
 
     table {
       width: 100%;
-      min-width: 850px;
+      min-width: 900px;
       border-collapse: collapse;
     }
 
@@ -203,6 +204,7 @@
     .actions {
       display: flex;
       gap: 6px;
+      flex-wrap: wrap;
     }
 
     .empty {
@@ -217,7 +219,21 @@
       color: #666;
     }
 
-    /* FENÊTRE CONFIRMATIONS */
+    /* QR */
+
+    .qr-box {
+      text-align: center;
+    }
+
+    .qr-box img {
+      width: 90px;
+      height: 90px;
+      border: 1px solid #ddd;
+      padding: 4px;
+      background: white;
+    }
+
+    /* MODALE */
 
     .modal {
       display: none;
@@ -228,14 +244,14 @@
       width: 100%;
       height: 100%;
       background: rgba(0,0,0,0.55);
-      padding: 20px;
+      padding: 15px;
       overflow-y: auto;
     }
 
     .modal-content {
       background: white;
-      max-width: 900px;
-      margin: 40px auto;
+      max-width: 1000px;
+      margin: 25px auto;
       border-radius: 10px;
       padding: 20px;
     }
@@ -254,23 +270,67 @@
     }
 
     .close {
-      background: #d00000;
+      background: #c62828;
       color: white;
-      font-size: 18px;
-      padding: 7px 12px;
+      font-size: 20px;
+      padding: 6px 12px;
     }
 
-    .qr-box {
+    /* STATISTIQUES */
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .stat-card {
+      padding: 15px;
+      border-radius: 8px;
       text-align: center;
-      padding: 10px;
     }
 
-    .qr-box img {
-      width: 120px;
-      height: 120px;
-      border: 1px solid #ddd;
-      padding: 5px;
-      background: white;
+    .stat-total {
+      background: #f0f0f0;
+    }
+
+    .stat-present {
+      background: #dff5e6;
+    }
+
+    .stat-absent {
+      background: #ffe3e3;
+    }
+
+    .stat-number {
+      display: block;
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    /* RECHERCHE */
+
+    .search-box {
+      margin: 15px 0;
+    }
+
+    .search-box input {
+      width: 100%;
+    }
+
+    /* QR MODALE */
+
+    #qrModal img {
+      max-width: 350px;
+      width: 90%;
+    }
+
+    .qr-link {
+      word-break: break-all;
+      color: #1769aa;
+      margin: 15px 0;
     }
 
     @media (max-width: 700px) {
@@ -299,12 +359,16 @@
         font-size: 13px;
       }
 
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
       .modal {
-        padding: 10px;
+        padding: 8px;
       }
 
       .modal-content {
-        margin: 20px auto;
+        margin: 15px auto;
         padding: 15px;
       }
     }
@@ -315,14 +379,21 @@
 
 <header>
   <div class="header-inner">
+
     <h1>Direction du Protocole d'État</h1>
-    <p>Ministère des Affaires Étrangères, de la Coopération et des Nigériens à l'Extérieur</p>
+
+    <p>
+      Ministère des Affaires Étrangères, de la Coopération
+      et des Nigériens à l'Extérieur
+    </p>
+
   </div>
 </header>
 
+
 <div class="container">
 
-  <!-- CRÉATION D'UNE CÉRÉMONIE -->
+  <!-- CRÉATION -->
 
   <div class="card">
 
@@ -333,6 +404,7 @@
       <div class="form-grid">
 
         <div class="form-group full">
+
           <label for="nom_ceremonie">
             Nom de la cérémonie
           </label>
@@ -343,9 +415,12 @@
             placeholder="Exemple : Cérémonie de remise des lettres de créance"
             required
           >
+
         </div>
 
+
         <div class="form-group full">
+
           <label for="titre">
             Titre
           </label>
@@ -353,12 +428,15 @@
           <input
             type="text"
             id="titre"
-            placeholder="Titre officiel de l'invitation"
+            placeholder="Titre officiel"
             required
           >
+
         </div>
 
+
         <div class="form-group">
+
           <label for="date_ceremonie">
             Date
           </label>
@@ -368,9 +446,12 @@
             id="date_ceremonie"
             required
           >
+
         </div>
 
+
         <div class="form-group">
+
           <label for="heure_ceremonie">
             Heure
           </label>
@@ -380,9 +461,12 @@
             id="heure_ceremonie"
             required
           >
+
         </div>
 
+
         <div class="form-group full">
+
           <label for="lieu">
             Lieu
           </label>
@@ -393,9 +477,11 @@
             placeholder="Exemple : Palais présidentiel"
             required
           >
+
         </div>
 
       </div>
+
 
       <div class="form-actions">
 
@@ -410,12 +496,13 @@
 
     </form>
 
+
     <div id="message"></div>
 
   </div>
 
 
-  <!-- LISTE DES CÉRÉMONIES -->
+  <!-- LISTE -->
 
   <div class="card">
 
@@ -428,13 +515,15 @@
       Chargement des cérémonies...
     </div>
 
+
     <div class="table-container">
 
-      <table id="ceremoniesTable">
+      <table>
 
         <thead>
 
           <tr>
+
             <th>Nom</th>
             <th>Titre</th>
             <th>Date</th>
@@ -443,9 +532,11 @@
             <th>Statut</th>
             <th>QR</th>
             <th>Confirmations</th>
+
           </tr>
 
         </thead>
+
 
         <tbody id="ceremoniesBody"></tbody>
 
@@ -460,7 +551,10 @@
 
 <!-- MODALE CONFIRMATIONS -->
 
-<div id="confirmationsModal" class="modal">
+<div
+  id="confirmationsModal"
+  class="modal"
+>
 
   <div class="modal-content">
 
@@ -477,82 +571,53 @@
 
     </div>
 
-    <!-- INFORMATIONS DE LA CÉRÉMONIE -->
 
     <div id="confirmationTitre"></div>
 
+
     <!-- STATISTIQUES -->
 
-    <div
-      id="confirmationStats"
-      style="
-        display:grid;
-        grid-template-columns:repeat(3,1fr);
-        gap:10px;
-        margin:15px 0;
-      "
-    >
+    <div class="stats">
 
-      <div
-        style="
-          background:#f3f3f3;
-          padding:15px;
-          border-radius:8px;
-          text-align:center;
-        "
-      >
-        <strong
+      <div class="stat-card stat-total">
+
+        <span
           id="totalConfirmations"
-          style="font-size:24px;"
+          class="stat-number"
         >
           0
-        </strong>
-
-        <br>
+        </span>
 
         Total
+
       </div>
 
 
-      <div
-        style="
-          background:#e0f5e8;
-          padding:15px;
-          border-radius:8px;
-          text-align:center;
-        "
-      >
-        <strong
+      <div class="stat-card stat-present">
+
+        <span
           id="totalPresents"
-          style="font-size:24px;"
+          class="stat-number"
         >
           0
-        </strong>
-
-        <br>
+        </span>
 
         Présents
+
       </div>
 
 
-      <div
-        style="
-          background:#ffe5e5;
-          padding:15px;
-          border-radius:8px;
-          text-align:center;
-        "
-      >
-        <strong
+      <div class="stat-card stat-absent">
+
+        <span
           id="totalAbsents"
-          style="font-size:24px;"
+          class="stat-number"
         >
           0
-        </strong>
-
-        <br>
+        </span>
 
         Absents
+
       </div>
 
     </div>
@@ -560,19 +625,12 @@
 
     <!-- RECHERCHE -->
 
-    <div style="margin-bottom:15px;">
+    <div class="search-box">
 
       <input
         type="text"
         id="rechercheConfirmation"
         placeholder="🔎 Rechercher par nom, fonction ou institution..."
-        style="
-          width:100%;
-          padding:12px;
-          border:1px solid #ccc;
-          border-radius:6px;
-          font-size:15px;
-        "
         oninput="filtrerConfirmations()"
       >
 
@@ -590,22 +648,16 @@
           <tr>
 
             <th>Nom</th>
-
             <th>Fonction</th>
-
             <th>Institution</th>
-
             <th>Présence</th>
-
             <th>Date de confirmation</th>
 
           </tr>
 
         </thead>
 
-        <tbody id="confirmationsBody">
-
-        </tbody>
+        <tbody id="confirmationsBody"></tbody>
 
       </table>
 
@@ -615,17 +667,72 @@
 
 </div>
 
+
+<!-- MODALE QR -->
+
+<div
+  id="qrModal"
+  class="modal"
+>
+
+  <div
+    class="modal-content"
+    style="max-width:500px;text-align:center;"
+  >
+
+    <div class="modal-header">
+
+      <h2>QR Code</h2>
+
+      <button
+        class="close"
+        onclick="fermerQR()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div>
+
+      <img
+        id="qrImage"
+        src=""
+        alt="QR Code"
+      >
+
+      <p>
+        Scannez ce QR Code pour confirmer votre présence.
+      </p>
+
+      <p
+        id="qrLink"
+        class="qr-link"
+      ></p>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
 <script>
 
-  /* ==============================
-     CONFIGURATION SUPABASE
-  ============================== */
+  /* =========================================
+     SUPABASE
+  ========================================= */
 
   const SUPABASE_URL =
     "https://vaszyhzgvtildxuxymcf.supabase.co";
 
   const SUPABASE_KEY =
     "sb_publishable_-2duftCVjNXzKUqL8DoYNg_L0GDnC6m";
+
 
   const supabaseClient =
     window.supabase.createClient(
@@ -634,9 +741,16 @@
     );
 
 
-  /* ==============================
-     ELEMENTS HTML
-  ============================== */
+  /* =========================================
+     VARIABLES
+  ========================================= */
+
+  let toutesLesConfirmations = [];
+
+
+  /* =========================================
+     ELEMENTS
+  ========================================= */
 
   const formulaire =
     document.getElementById("ceremonieForm");
@@ -651,11 +765,14 @@
     document.getElementById("loading");
 
 
-  /* ==============================
+  /* =========================================
      MESSAGE
-  ============================== */
+  ========================================= */
 
-  function afficherMessage(texte, type) {
+  function afficherMessage(
+    texte,
+    type
+  ) {
 
     message.textContent = texte;
 
@@ -663,16 +780,19 @@
 
     message.style.display = "block";
 
+
     setTimeout(function() {
+
       message.style.display = "none";
+
     }, 5000);
 
   }
 
 
-  /* ==============================
-     CHARGER LES CÉRÉMONIES
-  ============================== */
+  /* =========================================
+     CHARGER CEREMONIES
+  ========================================= */
 
   async function chargerCeremonies() {
 
@@ -680,94 +800,157 @@
 
     ceremoniesBody.innerHTML = "";
 
-    const { data, error } = await supabaseClient
-      .from("ceremonies")
-      .select("*")
-      .order("date_ceremonie", {
-        ascending: true
-      });
+
+    const resultat =
+      await supabaseClient
+        .from("ceremonies")
+        .select("*")
+        .order(
+          "date_ceremonie",
+          {
+            ascending: true
+          }
+        );
+
+
+    const data = resultat.data;
+
+    const error = resultat.error;
+
 
     loading.style.display = "none";
+
 
     if (error) {
 
       console.error(error);
 
       ceremoniesBody.innerHTML = `
+
         <tr>
-          <td colspan="8" class="empty">
+
+          <td
+            colspan="8"
+            class="empty"
+          >
             Erreur lors du chargement des cérémonies.
+            <br><br>
+            ${echapper(error.message)}
           </td>
+
         </tr>
+
       `;
 
       return;
     }
+
 
     if (!data || data.length === 0) {
 
       ceremoniesBody.innerHTML = `
+
         <tr>
-          <td colspan="8" class="empty">
+
+          <td
+            colspan="8"
+            class="empty"
+          >
             Aucune cérémonie enregistrée.
           </td>
+
         </tr>
+
       `;
 
       return;
     }
+
 
     data.forEach(function(ceremonie) {
 
       const ligne =
         document.createElement("tr");
 
+
       const dateFormatee =
-        formaterDate(ceremonie.date_ceremonie);
+        formaterDate(
+          ceremonie.date_ceremonie
+        );
+
 
       const heureFormatee =
-        formaterHeure(ceremonie.heure_ceremonie);
+        formaterHeure(
+          ceremonie.heure_ceremonie
+        );
+
 
       const confirmationUrl =
         window.location.origin +
-        window.location.pathname.replace(
-          "gestion.html",
-          "confirmation.html"
-        ) +
+        window.location.pathname
+          .replace(
+            "gestion.html",
+            "confirmation.html"
+          ) +
         "?id=" +
-        encodeURIComponent(ceremonie.id);
+        encodeURIComponent(
+          ceremonie.id
+        );
+
 
       const qrUrl =
-        "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
-        encodeURIComponent(confirmationUrl);
+        "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" +
+        encodeURIComponent(
+          confirmationUrl
+        );
+
 
       ligne.innerHTML = `
 
         <td>
-          ${echapper(ceremonie.nom_ceremonie || "")}
+          ${echapper(
+            ceremonie.nom_ceremonie || ""
+          )}
         </td>
 
+
         <td>
-          ${echapper(ceremonie.titre || "")}
+          ${echapper(
+            ceremonie.titre || ""
+          )}
         </td>
+
 
         <td>
           ${dateFormatee}
         </td>
 
+
         <td>
           ${heureFormatee}
         </td>
 
-        <td>
-          ${echapper(ceremonie.lieu || "")}
-        </td>
 
         <td>
-          <span class="status">
-            ${echapper(ceremonie.statut || "Nouvelle")}
-          </span>
+          ${echapper(
+            ceremonie.lieu || ""
+          )}
         </td>
+
+
+        <td>
+
+          <span class="status">
+
+            ${echapper(
+              ceremonie.statut ||
+              "Nouvelle"
+            )}
+
+          </span>
+
+        </td>
+
 
         <td>
 
@@ -778,11 +961,11 @@
               alt="QR Code"
             >
 
-            <br>
+            <br><br>
 
             <button
               class="btn-blue"
-              onclick="ouvrirQR('${ceremonie.id}', '${escapeJS(confirmationUrl)}')"
+              onclick="ouvrirQR('${escapeJS(confirmationUrl)}')"
             >
               Voir QR
             </button>
@@ -791,11 +974,15 @@
 
         </td>
 
+
         <td>
 
           <button
             class="btn-green"
-            onclick="voirConfirmations('${ceremonie.id}', '${escapeJS(ceremonie.nom_ceremonie || "")}')"
+            onclick="voirConfirmations(
+              '${escapeJS(ceremonie.id)}',
+              '${escapeJS(ceremonie.nom_ceremonie || "")}'
+            )"
           >
             Confirmations
           </button>
@@ -804,16 +991,19 @@
 
       `;
 
-      ceremoniesBody.appendChild(ligne);
+
+      ceremoniesBody.appendChild(
+        ligne
+      );
 
     });
 
   }
 
 
-  /* ==============================
-     AJOUTER UNE CÉRÉMONIE
-  ============================== */
+  /* =========================================
+     AJOUTER CEREMONIE
+  ========================================= */
 
   formulaire.addEventListener(
     "submit",
@@ -821,33 +1011,51 @@
 
       event.preventDefault();
 
+
       const nom =
-        document.getElementById(
-          "nom_ceremonie"
-        ).value.trim();
+        document
+          .getElementById(
+            "nom_ceremonie"
+          )
+          .value
+          .trim();
+
 
       const titre =
-        document.getElementById(
-          "titre"
-        ).value.trim();
+        document
+          .getElementById(
+            "titre"
+          )
+          .value
+          .trim();
+
 
       const date =
-        document.getElementById(
-          "date_ceremonie"
-        ).value;
+        document
+          .getElementById(
+            "date_ceremonie"
+          )
+          .value;
+
 
       const heure =
-        document.getElementById(
-          "heure_ceremonie"
-        ).value;
+        document
+          .getElementById(
+            "heure_ceremonie"
+          )
+          .value;
+
 
       const lieu =
-        document.getElementById(
-          "lieu"
-        ).value.trim();
+        document
+          .getElementById(
+            "lieu"
+          )
+          .value
+          .trim();
 
 
-      const { data, error } =
+      const resultat =
         await supabaseClient
           .from("ceremonies")
           .insert([
@@ -863,12 +1071,16 @@
           .select();
 
 
-      if (error) {
+      if (resultat.error) {
 
-        console.error(error);
+        console.error(
+          resultat.error
+        );
+
 
         afficherMessage(
-          "Erreur : " + error.message,
+          "Erreur : " +
+          resultat.error.message,
           "error"
         );
 
@@ -884,15 +1096,16 @@
 
       formulaire.reset();
 
+
       chargerCeremonies();
 
     }
   );
 
 
-  /* ==============================
+  /* =========================================
      VOIR CONFIRMATIONS
-  ============================== */
+  ========================================= */
 
   async function voirConfirmations(
     ceremonieId,
@@ -904,10 +1117,12 @@
         "confirmationsModal"
       );
 
+
     const body =
       document.getElementById(
         "confirmationsBody"
       );
+
 
     const titre =
       document.getElementById(
@@ -915,311 +1130,192 @@
       );
 
 
-    titre.innerHTML =
-      "<p><strong>Cérémonie :</strong> " +
-      echapper(nomCeremonie) +
-      "</p>";
+    const recherche =
+      document.getElementById(
+        "rechercheConfirmation"
+      );
+
+
+    recherche.value = "";
+
+
+    titre.innerHTML = `
+
+      <p>
+
+        <strong>Cérémonie :</strong>
+
+        ${echapper(
+          nomCeremonie
+        )}
+
+      </p>
+
+    `;
 
 
     body.innerHTML = `
+
       <tr>
-        <td colspan="5" class="loading">
+
+        <td
+          colspan="5"
+          class="loading"
+        >
           Chargement des confirmations...
         </td>
+
       </tr>
+
     `;
+
+
+    document.getElementById(
+      "totalConfirmations"
+    ).textContent = "0";
+
+
+    document.getElementById(
+      "totalPresents"
+    ).textContent = "0";
+
+
+    document.getElementById(
+      "totalAbsents"
+    ).textContent = "0";
 
 
     modal.style.display = "block";
 
 
-    const { data, error } =
+    const resultat =
       await supabaseClient
         .from("confirmations")
         .select("*")
-        .eq("ceremonie_id", ceremonieId)
-        .order("created_at", {
-          ascending: false
-        });
+        .eq(
+          "ceremonie_id",
+          ceremonieId
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    const data = resultat.data;
+
+    const error = resultat.error;
 
 
     if (error) {
 
       console.error(error);
 
-      body.innerHTML = `
-        <tr>
-          <td colspan="5" class="empty">
-            Impossible de charger les confirmations.
-            <br><br>
-            ${echapper(error.message)}
-          </td>
-        </tr>
-      `;
-
-      return;
-    }
-
-
-    if (!data || data.length === 0) {
 
       body.innerHTML = `
+
         <tr>
-          <td colspan="5" class="empty">
-            Aucune confirmation pour cette cérémonie.
-          </td>
-        </tr>
-      `;
 
-      return;
-    }
-
-
-    body.innerHTML = "";
-
-
-    data.forEach(function(
-      confirmation
-    ) {
-
-      const ligne =
-        document.createElement("tr");
-
-
-      const dateConfirmation =
-        confirmation.created_at
-          ? new Date(
-              confirmation.created_at
-            ).toLocaleString(
-              "fr-FR"
-            )
-          : "";
-
-
-      ligne.innerHTML = `
-
-        <td>
-          ${echapper(
-            confirmation.nom || ""
-          )}
-        </td>
-
-        <td>
-          ${echapper(
-            confirmation.fonction || ""
-          )}
-        </td>
-
-        <td>
-          ${echapper(
-            confirmation.institution || ""
-          )}
-        </td>
-
-        <td>
-          ${echapper(
-            confirmation.presence || ""
-          )}
-        </td>
-
-        <td>
-          ${dateConfirmation}
-        </td>
-
-      `;
-
-
-      body.appendChild(ligne);
-
-    });
-
-  }
-
-
-  /* ==============================
-     FERMER CONFIRMATIONS
-  ============================== */
-
-  function fermerConfirmations() {
-
-    document.getElementById(
-      "confirmationsModal"
-    ).style.display = "none";
-
-  }
-
-
-  /* ==============================
-     OUVRIR QR
-  ============================== */
-
-  function ouvrirQR(
-    id,
-    url
-  ) {
-
-    const qr =
-      "https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=" +
-      encodeURIComponent(url);
-
-    const nouvelleFenetre =
-      window.open(
-        "",
-        "_blank"
-      );
-
-    nouvelleFenetre.document.write(`
-
-      <html>
-
-        <head>
-
-          <title>QR Code</title>
-
-          <style>
-
-            body {
-              font-family: Arial;
-              text-align: center;
-              padding: 30px;
-            }
-
-            img {
-              max-width: 400px;
-              width: 90%;
-            }
-
-          </style>
-
-        </head>
-
-        <body>
-
-          <h2>QR Code de confirmation</h2>
-
-          <img
-            src="${qr}"
-            alt="QR Code"
+          <td
+            colspan="5"
+            class="empty"
           >
 
-          <p>
-            Scannez ce QR Code pour confirmer votre présence.
-          </p>
+            Impossible de charger les confirmations.
 
-        </body>
+            <br><br>
 
-      </html>
+            ${echapper(
+              error.message
+            )}
 
-    `);
+          </td>
 
-  }
+        </tr>
 
+      `;
 
-  /* ==============================
-     FORMATER DATE
-  ============================== */
-
-  function formaterDate(date) {
-
-    if (!date) {
-      return "";
+      return;
     }
 
-    const d =
-      new Date(
-        date + "T00:00:00"
-      );
 
-    return d.toLocaleDateString(
-      "fr-FR"
+    toutesLesConfirmations =
+      data || [];
+
+
+    afficherStatistiques(
+      toutesLesConfirmations
+    );
+
+
+    afficherListeConfirmations(
+      toutesLesConfirmations
     );
 
   }
 
 
-  /* ==============================
-     FORMATER HEURE
-  ============================== */
+  /* =========================================
+     AFFICHER STATISTIQUES
+  ========================================= */
 
-  function formaterHeure(heure) {
+  function afficherStatistiques(
+    confirmations
+  ) {
 
-    if (!heure) {
-      return "";
-    }
-
-    return heure.substring(
-      0,
-      5
-    );
-
-  }
+    const total =
+      confirmations.length;
 
 
-  /* ==============================
-     SECURISER LE HTML
-  ============================== */
+    let presents = 0;
 
-  function echapper(texte) {
-
-    return String(texte)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-
-  }
+    let absents = 0;
 
 
-  /* ==============================
-     SECURISER JAVASCRIPT
-  ============================== */
+    confirmations.forEach(
+      function(item) {
 
-  function escapeJS(texte) {
-
-    return String(texte)
-      .replace(/\\/g, "\\\\")
-      .replace(/'/g, "\\'")
-      .replace(/\n/g, "\\n")
-      .replace(/\r/g, "\\r");
-
-  }
+        const presence =
+          String(
+            item.presence || ""
+          )
+          .toLowerCase()
+          .trim();
 
 
-  /* ==============================
-     FERMER LA MODALE EN CLIQUANT
-     À L'EXTÉRIEUR
-  ============================== */
+        if (
+          presence === "oui" ||
+          presence === "présent" ||
+          presence === "present" ||
+          presence === "présente" ||
+          presence === "presente"
+        ) {
 
-  window.addEventListener(
-    "click",
-    function(event) {
+          presents++;
 
-      const modal =
-        document.getElementById(
-          "confirmationsModal"
-        );
+        }
 
-      if (
-        event.target === modal
-      ) {
 
-        fermerConfirmations();
+        if (
+          presence === "non" ||
+          presence === "absent" ||
+          presence === "absente"
+        ) {
+
+          absents++;
+
+        }
 
       }
-
-    }
-  );
+    );
 
 
-  /* ==============================
-     CHARGEMENT INITIAL
-  ============================== */
+    document.getElementById(
+      "totalConfirmations"
+    ).textContent = total;
 
-  chargerCeremonies();
 
-</script>
-
-</body>
-          </html>   
-    
+    document.getElementById(
+      "t

@@ -1,53 +1,56 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Gestion des invitations | Protocole d'État</title>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Gestion des invitations | Protocole d'État
+  </title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      color: #333;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f7;
+      color: #222;
     }
 
     header {
       background: linear-gradient(
-        to right,
-        #e87500 0%,
-        #e87500 33%,
-        #ffffff 33%,
-        #ffffff 66%,
-        #0b8f3c 66%,
-        #0b8f3c 100%
+        90deg,
+        #e85d04 0%,
+        #ffffff 50%,
+        #16803c 100%
       );
-      padding: 6px 0;
-    }
 
-    .header-inner {
-      background: white;
-      margin: 0 10px;
-      padding: 15px;
+      padding: 20px 15px;
       text-align: center;
+      border-bottom: 4px solid #e85d04;
     }
 
-    .header-inner h1 {
-      margin: 5px 0;
-      color: #d96b00;
+    header h1 {
+      margin: 0;
       font-size: 24px;
+      color: #222;
     }
 
-    .header-inner p {
-      margin: 5px 0;
-      color: #555;
+    header p {
+      margin: 7px 0 0;
       font-size: 14px;
+      font-weight: bold;
     }
 
     .container {
@@ -58,17 +61,16 @@
 
     .card {
       background: white;
-      padding: 20px;
+      border-radius: 12px;
+      padding: 22px;
       margin-bottom: 25px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
 
-    h2 {
+    .card h2 {
       margin-top: 0;
-      color: #d96b00;
-      border-bottom: 2px solid #eee;
-      padding-bottom: 10px;
+      color: #16803c;
+      font-size: 21px;
     }
 
     .form-grid {
@@ -89,47 +91,52 @@
     label {
       font-weight: bold;
       margin-bottom: 6px;
+      font-size: 14px;
     }
 
-    input {
+    input,
+    select {
+      width: 100%;
       padding: 11px;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 7px;
       font-size: 15px;
+      background: white;
     }
 
-    input:focus {
+    input:focus,
+    select:focus {
       outline: none;
-      border-color: #d96b00;
+      border-color: #e85d04;
+      box-shadow: 0 0 0 2px rgba(232,93,4,0.12);
     }
 
-    button {
+    .btn {
       border: none;
-      border-radius: 6px;
+      border-radius: 7px;
       padding: 10px 14px;
       cursor: pointer;
-      font-size: 14px;
       font-weight: bold;
+      font-size: 14px;
+      margin: 2px;
     }
 
     .btn-orange {
-      background: #e87500;
+      background: #e85d04;
       color: white;
+    }
+
+    .btn-orange:hover {
+      background: #c94d00;
     }
 
     .btn-green {
-      background: #0b8f3c;
+      background: #16803c;
       color: white;
     }
 
-    .btn-blue {
-      background: #1769aa;
-      color: white;
-    }
-
-    .btn-red {
-      background: #c62828;
-      color: white;
+    .btn-green:hover {
+      background: #10652e;
     }
 
     .btn-gray {
@@ -137,32 +144,39 @@
       color: white;
     }
 
-    button:hover {
-      opacity: 0.85;
+    .btn-danger {
+      background: #b42318;
+      color: white;
     }
 
-    .form-actions {
-      margin-top: 20px;
-    }
-
-    #message {
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 6px;
+    .message {
       display: none;
+      padding: 12px;
+      border-radius: 7px;
+      margin-bottom: 15px;
+      font-weight: bold;
     }
 
-    .success {
-      background: #dff5e6;
-      color: #176b34;
+    .message.success {
+      display: block;
+      background: #e8f7ee;
+      color: #146c36;
+      border: 1px solid #a9ddbc;
     }
 
-    .error {
-      background: #ffe1e1;
-      color: #a00000;
+    .message.error {
+      display: block;
+      background: #fff0f0;
+      color: #a61b1b;
+      border: 1px solid #e2aaaa;
     }
 
-    /* TABLEAU */
+    .loading {
+      padding: 20px;
+      text-align: center;
+      font-weight: bold;
+      color: #666;
+    }
 
     .table-container {
       width: 100%;
@@ -172,171 +186,158 @@
 
     table {
       width: 100%;
-      min-width: 900px;
+      min-width: 850px;
       border-collapse: collapse;
     }
 
     th,
     td {
-      padding: 12px 10px;
+      padding: 11px 9px;
       border-bottom: 1px solid #ddd;
       text-align: left;
       white-space: nowrap;
+      font-size: 14px;
     }
 
     th {
-      background: #f3f3f3;
-      color: #333;
+      background: #16803c;
+      color: white;
     }
 
-    tr:hover {
-      background: #fafafa;
-    }
-
-    .status {
-      display: inline-block;
-      padding: 5px 9px;
-      border-radius: 15px;
-      background: #eee;
-      font-size: 12px;
-    }
-
-    .actions {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
+    tr:hover td {
+      background: #f8f8f8;
     }
 
     .empty {
       text-align: center;
-      padding: 20px;
-      color: #777;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 20px;
+      padding: 25px;
       color: #666;
     }
 
-    /* QR */
-
-    .qr-box {
-      text-align: center;
-    }
-
-    .qr-box img {
-      width: 90px;
-      height: 90px;
-      border: 1px solid #ddd;
-      padding: 4px;
-      background: white;
-    }
-
-    /* MODALE */
+    /* =========================
+       MODALES
+    ========================= */
 
     .modal {
       display: none;
       position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.55);
-      padding: 15px;
+      z-index: 9999;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      padding: 20px;
       overflow-y: auto;
     }
 
     .modal-content {
       background: white;
-      max-width: 1000px;
-      margin: 25px auto;
-      border-radius: 10px;
+      width: 100%;
+      max-width: 900px;
+      margin: 30px auto;
+      border-radius: 12px;
       padding: 20px;
+      position: relative;
     }
 
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-
-    .modal-header h2 {
-      margin: 0;
-      border: none;
+    .modal-small {
+      max-width: 500px;
+      text-align: center;
     }
 
     .close {
-      background: #c62828;
-      color: white;
-      font-size: 20px;
-      padding: 6px 12px;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 30px;
+      cursor: pointer;
+      color: #555;
+      line-height: 1;
     }
 
-    /* STATISTIQUES */
+    .close:hover {
+      color: #e85d04;
+    }
+
+    #qrImage {
+      width: 260px;
+      max-width: 90%;
+      margin: 20px auto;
+      display: block;
+      border: 1px solid #ddd;
+      padding: 10px;
+      background: white;
+    }
+
+    .confirmation-title {
+      margin-top: 0;
+      color: #16803c;
+    }
 
     .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin: 20px 0;
+      gap: 10px;
+      margin: 15px 0;
     }
 
-    .stat-card {
+    .stat {
       padding: 15px;
       border-radius: 8px;
       text-align: center;
+      background: #f1f3f4;
     }
 
-    .stat-total {
-      background: #f0f0f0;
-    }
-
-    .stat-present {
-      background: #dff5e6;
-    }
-
-    .stat-absent {
-      background: #ffe3e3;
-    }
-
-    .stat-number {
+    .stat strong {
       display: block;
-      font-size: 26px;
-      font-weight: bold;
-      margin-bottom: 5px;
+      font-size: 24px;
+      margin-top: 5px;
     }
 
-    /* RECHERCHE */
+    .stat.total {
+      border-left: 5px solid #e85d04;
+    }
+
+    .stat.present {
+      border-left: 5px solid #16803c;
+    }
+
+    .stat.absent {
+      border-left: 5px solid #b42318;
+    }
 
     .search-box {
       margin: 15px 0;
     }
 
     .search-box input {
-      width: 100%;
+      max-width: 500px;
     }
 
-    /* QR MODALE */
-
-    #qrModal img {
-      max-width: 350px;
-      width: 90%;
+    .presence-present {
+      color: #16803c;
+      font-weight: bold;
     }
 
-    .qr-link {
-      word-break: break-all;
-      color: #1769aa;
-      margin: 15px 0;
+    .presence-absent {
+      color: #b42318;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      font-size: 13px;
     }
 
     @media (max-width: 700px) {
 
+      header h1 {
+        font-size: 20px;
+      }
+
       .container {
         width: 96%;
+        margin: 15px auto;
       }
 
       .card {
@@ -351,350 +352,258 @@
         grid-column: auto;
       }
 
-      .header-inner h1 {
-        font-size: 20px;
-      }
-
-      .header-inner p {
-        font-size: 13px;
-      }
-
       .stats {
         grid-template-columns: 1fr;
       }
 
-      .modal {
-        padding: 8px;
+      .btn {
+        padding: 9px 11px;
       }
 
-      .modal-content {
-        margin: 15px auto;
-        padding: 15px;
-      }
     }
+
   </style>
+
 </head>
 
 <body>
 
-<header>
-  <div class="header-inner">
+  <header>
 
-    <h1>Direction du Protocole d'État</h1>
+    <h1>
+      Gestion des invitations
+    </h1>
+
+    <p>
+      Direction du Protocole d'État
+    </p>
 
     <p>
       Ministère des Affaires Étrangères, de la Coopération
       et des Nigériens à l'Extérieur
     </p>
 
-  </div>
-</header>
+  </header>
 
 
-<div class="container">
-
-  <!-- CRÉATION -->
-
-  <div class="card">
-
-    <h2>Créer une cérémonie</h2>
-
-    <form id="ceremonieForm">
-
-      <div class="form-grid">
-
-        <div class="form-group full">
-
-          <label for="nom_ceremonie">
-            Nom de la cérémonie
-          </label>
-
-          <input
-            type="text"
-            id="nom_ceremonie"
-            placeholder="Exemple : Cérémonie de remise des lettres de créance"
-            required
-          >
-
-        </div>
+  <main class="container">
 
 
-        <div class="form-group full">
-
-          <label for="titre">
-            Titre
-          </label>
-
-          <input
-            type="text"
-            id="titre"
-            placeholder="Titre officiel"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="date_ceremonie">
-            Date
-          </label>
-
-          <input
-            type="date"
-            id="date_ceremonie"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group">
-
-          <label for="heure_ceremonie">
-            Heure
-          </label>
-
-          <input
-            type="time"
-            id="heure_ceremonie"
-            required
-          >
-
-        </div>
-
-
-        <div class="form-group full">
-
-          <label for="lieu">
-            Lieu
-          </label>
-
-          <input
-            type="text"
-            id="lieu"
-            placeholder="Exemple : Palais présidentiel"
-            required
-          >
-
-        </div>
-
-      </div>
-
-
-      <div class="form-actions">
-
-        <button
-          type="submit"
-          class="btn-orange"
-        >
-          Ajouter la cérémonie
-        </button>
-
-      </div>
-
-    </form>
-
-
-    <div id="message"></div>
-
-  </div>
-
-
-  <!-- LISTE -->
-
-  <div class="card">
-
-    <h2>Cérémonies enregistrées</h2>
+    <!-- =========================
+         MESSAGE
+    ========================== -->
 
     <div
-      id="loading"
-      class="loading"
-    >
-      Chargement des cérémonies...
-    </div>
+      id="message"
+      class="message"
+    ></div>
 
 
-    <div class="table-container">
+    <!-- =========================
+         CREATION CEREMONIE
+    ========================== -->
 
-      <table>
+    <section class="card">
 
-        <thead>
+      <h2>
+        Créer une cérémonie
+      </h2>
 
-          <tr>
+      <form id="ceremonieForm">
 
-            <th>Nom</th>
-            <th>Titre</th>
-            <th>Date</th>
-            <th>Heure</th>
-            <th>Lieu</th>
-            <th>Statut</th>
-            <th>QR</th>
-            <th>Confirmations</th>
-
-          </tr>
-
-        </thead>
+        <div class="form-grid">
 
 
-        <tbody id="ceremoniesBody"></tbody>
+          <div class="form-group">
 
-      </table>
+            <label for="nom_ceremonie">
+              Nom de la cérémonie
+            </label>
 
-    </div>
+            <input
+              type="text"
+              id="nom_ceremonie"
+              required
+              placeholder="Exemple : Fête nationale"
+            >
 
-  </div>
-
-</div>
+          </div>
 
 
-<!-- MODALE CONFIRMATIONS -->
+          <div class="form-group">
 
-<div
-  id="confirmationsModal"
-  class="modal"
->
+            <label for="titre">
+              Titre
+            </label>
 
-  <div class="modal-content">
+            <input
+              type="text"
+              id="titre"
+              placeholder="Exemple : Cérémonie officielle"
+            >
 
-    <div class="modal-header">
+          </div>
 
-      <h2>Confirmations</h2>
 
-      <button
-        class="close"
-        onclick="fermerConfirmations()"
+          <div class="form-group">
+
+            <label for="date_ceremonie">
+              Date
+            </label>
+
+            <input
+              type="date"
+              id="date_ceremonie"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="heure_ceremonie">
+              Heure
+            </label>
+
+            <input
+              type="time"
+              id="heure_ceremonie"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group full">
+
+            <label for="lieu">
+              Lieu
+            </label>
+
+            <input
+              type="text"
+              id="lieu"
+              required
+              placeholder="Exemple : Palais des Congrès de Niamey"
+            >
+
+          </div>
+
+
+          <div class="form-group full">
+
+            <button
+              type="submit"
+              class="btn btn-orange"
+              id="btnAjouter"
+            >
+              Ajouter la cérémonie
+            </button>
+
+          </div>
+
+
+        </div>
+
+      </form>
+
+    </section>
+
+
+    <!-- =========================
+         LISTE CEREMONIES
+    ========================== -->
+
+    <section class="card">
+
+      <h2>
+        Cérémonies enregistrées
+      </h2>
+
+
+      <div
+        id="loading"
+        class="loading"
       >
-        ×
-      </button>
-
-    </div>
-
-
-    <div id="confirmationTitre"></div>
-
-
-    <!-- STATISTIQUES -->
-
-    <div class="stats">
-
-      <div class="stat-card stat-total">
-
-        <span
-          id="totalConfirmations"
-          class="stat-number"
-        >
-          0
-        </span>
-
-        Total
-
+        Chargement des cérémonies...
       </div>
 
 
-      <div class="stat-card stat-present">
+      <div class="table-container">
 
-        <span
-          id="totalPresents"
-          class="stat-number"
-        >
-          0
-        </span>
+        <table>
 
-        Présents
+          <thead>
+
+            <tr>
+
+              <th>Nom</th>
+
+              <th>Titre</th>
+
+              <th>Date</th>
+
+              <th>Heure</th>
+
+              <th>Lieu</th>
+
+              <th>Statut</th>
+
+              <th>QR</th>
+
+              <th>Confirmations</th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody id="ceremoniesBody">
+
+          </tbody>
+
+        </table>
 
       </div>
 
-
-      <div class="stat-card stat-absent">
-
-        <span
-          id="totalAbsents"
-          class="stat-number"
-        >
-          0
-        </span>
-
-        Absents
-
-      </div>
-
-    </div>
+    </section>
 
 
-    <!-- RECHERCHE -->
-
-    <div class="search-box">
-
-      <input
-        type="text"
-        id="rechercheConfirmation"
-        placeholder="🔎 Rechercher par nom, fonction ou institution..."
-        oninput="filtrerConfirmations()"
-      >
-
-    </div>
+  </main>
 
 
-    <!-- TABLEAU -->
+  <footer>
 
-    <div class="table-container">
+    © Direction du Protocole d'État — République du Niger
 
-      <table>
-
-        <thead>
-
-          <tr>
-
-            <th>Nom</th>
-            <th>Fonction</th>
-            <th>Institution</th>
-            <th>Présence</th>
-            <th>Date de confirmation</th>
-
-          </tr>
-
-        </thead>
-
-        <tbody id="confirmationsBody"></tbody>
-
-      </table>
-
-    </div>
-
-  </div>
-
-</div>
+  </footer>
 
 
-<!-- MODALE QR -->
-
-<div
-  id="qrModal"
-  class="modal"
->
+  <!-- =========================
+       MODALE QR
+  ========================== -->
 
   <div
-    class="modal-content"
-    style="max-width:500px;text-align:center;"
+    id="qrModal"
+    class="modal"
   >
 
-    <div class="modal-header">
+    <div class="modal-content modal-small">
 
-      <h2>QR Code</h2>
-
-      <button
+      <span
         class="close"
         onclick="fermerQR()"
       >
-        ×
-      </button>
+        &times;
+      </span>
 
-    </div>
+      <h2>
+        QR Code de confirmation
+      </h2>
 
-
-    <div>
+      <p id="qrNom">
+      </p>
 
       <img
         id="qrImage"
@@ -703,619 +612,626 @@
       >
 
       <p>
-        Scannez ce QR Code pour confirmer votre présence.
+        Scannez ce QR code pour accéder
+        à la page de confirmation.
       </p>
 
-      <p
-        id="qrLink"
-        class="qr-link"
-      ></p>
+      <button
+        class="btn btn-gray"
+        onclick="fermerQR()"
+      >
+        Fermer
+      </button>
 
     </div>
 
   </div>
 
-</div>
 
+  <!-- =========================
+       MODALE CONFIRMATIONS
+  ========================== -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <div
+    id="confirmationsModal"
+    class="modal"
+  >
 
+    <div class="modal-content">
 
-<script>
+      <span
+        class="close"
+        onclick="fermerConfirmations()"
+      >
+        &times;
+      </span>
 
-  /* =========================================
-     SUPABASE
-  ========================================= */
 
-  const SUPABASE_URL =
-    "https://vaszyhzgvtildxuxymcf.supabase.co";
+      <h2
+        id="confirmationTitre"
+        class="confirmation-title"
+      >
+        Confirmations
+      </h2>
 
-  const SUPABASE_KEY =
-    "sb_publishable_-2duftCVjNXzKUqL8DoYNg_L0GDnC6m";
 
+      <div
+        id="confirmationLoading"
+        class="loading"
+      >
+        Chargement des confirmations...
+      </div>
 
-  const supabaseClient =
-    window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
 
+      <div id="confirmationZone">
 
-  /* =========================================
-     VARIABLES
-  ========================================= */
+        <div class="stats">
 
-  let toutesLesConfirmations = [];
+          <div class="stat total">
 
+            Total
 
-  /* =========================================
-     ELEMENTS
-  ========================================= */
-
-  const formulaire =
-    document.getElementById("ceremonieForm");
-
-  const message =
-    document.getElementById("message");
-
-  const ceremoniesBody =
-    document.getElementById("ceremoniesBody");
-
-  const loading =
-    document.getElementById("loading");
-
-
-  /* =========================================
-     MESSAGE
-  ========================================= */
-
-  function afficherMessage(
-    texte,
-    type
-  ) {
-
-    message.textContent = texte;
-
-    message.className = type;
-
-    message.style.display = "block";
-
-
-    setTimeout(function() {
-
-      message.style.display = "none";
-
-    }, 5000);
-
-  }
-
-
-  /* =========================================
-     CHARGER CEREMONIES
-  ========================================= */
-
-  async function chargerCeremonies() {
-
-    loading.style.display = "block";
-
-    ceremoniesBody.innerHTML = "";
-
-
-    const resultat =
-      await supabaseClient
-        .from("ceremonies")
-        .select("*")
-        .order(
-          "date_ceremonie",
-          {
-            ascending: true
-          }
-        );
-
-
-    const data = resultat.data;
-
-    const error = resultat.error;
-
-
-    loading.style.display = "none";
-
-
-    if (error) {
-
-      console.error(error);
-
-      ceremoniesBody.innerHTML = `
-
-        <tr>
-
-          <td
-            colspan="8"
-            class="empty"
-          >
-            Erreur lors du chargement des cérémonies.
-            <br><br>
-            ${echapper(error.message)}
-          </td>
-
-        </tr>
-
-      `;
-
-      return;
-    }
-
-
-    if (!data || data.length === 0) {
-
-      ceremoniesBody.innerHTML = `
-
-        <tr>
-
-          <td
-            colspan="8"
-            class="empty"
-          >
-            Aucune cérémonie enregistrée.
-          </td>
-
-        </tr>
-
-      `;
-
-      return;
-    }
-
-
-    data.forEach(function(ceremonie) {
-
-      const ligne =
-        document.createElement("tr");
-
-
-      const dateFormatee =
-        formaterDate(
-          ceremonie.date_ceremonie
-        );
-
-
-      const heureFormatee =
-        formaterHeure(
-          ceremonie.heure_ceremonie
-        );
-
-
-      const confirmationUrl =
-        window.location.origin +
-        window.location.pathname
-          .replace(
-            "gestion.html",
-            "confirmation.html"
-          ) +
-        "?id=" +
-        encodeURIComponent(
-          ceremonie.id
-        );
-
-
-      const qrUrl =
-        "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" +
-        encodeURIComponent(
-          confirmationUrl
-        );
-
-
-      ligne.innerHTML = `
-
-        <td>
-          ${echapper(
-            ceremonie.nom_ceremonie || ""
-          )}
-        </td>
-
-
-        <td>
-          ${echapper(
-            ceremonie.titre || ""
-          )}
-        </td>
-
-
-        <td>
-          ${dateFormatee}
-        </td>
-
-
-        <td>
-          ${heureFormatee}
-        </td>
-
-
-        <td>
-          ${echapper(
-            ceremonie.lieu || ""
-          )}
-        </td>
-
-
-        <td>
-
-          <span class="status">
-
-            ${echapper(
-              ceremonie.statut ||
-              "Nouvelle"
-            )}
-
-          </span>
-
-        </td>
-
-
-        <td>
-
-          <div class="qr-box">
-
-            <img
-              src="${qrUrl}"
-              alt="QR Code"
-            >
-
-            <br><br>
-
-            <button
-              class="btn-blue"
-              onclick="ouvrirQR('${escapeJS(confirmationUrl)}')"
-            >
-              Voir QR
-            </button>
+            <strong id="totalConfirmations">
+              0
+            </strong>
 
           </div>
 
-        </td>
+
+          <div class="stat present">
+
+            Présents
+
+            <strong id="totalPresents">
+              0
+            </strong>
+
+          </div>
 
 
-        <td>
+          <div class="stat absent">
 
-          <button
-            class="btn-green"
-            onclick="voirConfirmations(
-              '${escapeJS(ceremonie.id)}',
-              '${escapeJS(ceremonie.nom_ceremonie || "")}'
-            )"
+            Absents
+
+            <strong id="totalAbsents">
+              0
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="search-box">
+
+          <input
+            type="search"
+            id="rechercheConfirmation"
+            placeholder="Rechercher par nom, fonction ou institution..."
           >
-            Confirmations
-          </button>
 
-        </td>
-
-      `;
+        </div>
 
 
-      ceremoniesBody.appendChild(
-        ligne
-      );
+        <div class="table-container">
 
-    });
+          <table>
 
-  }
+            <thead>
 
+              <tr>
 
-  /* =========================================
-     AJOUTER CEREMONIE
-  ========================================= */
+                <th>Nom</th>
 
-  formulaire.addEventListener(
-    "submit",
-    async function(event) {
+                <th>Fonction</th>
 
-      event.preventDefault();
+                <th>Institution</th>
 
+                <th>Présence</th>
 
-      const nom =
-        document
-          .getElementById(
-            "nom_ceremonie"
-          )
-          .value
-          .trim();
+                <th>Date</th>
+
+              </tr>
+
+            </thead>
 
 
-      const titre =
-        document
-          .getElementById(
-            "titre"
-          )
-          .value
-          .trim();
+            <tbody id="confirmationsBody">
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
 
 
-      const date =
-        document
-          .getElementById(
-            "date_ceremonie"
-          )
-          .value;
+  <script>
+
+    /* =========================================
+       CONFIGURATION SUPABASE
+    ========================================= */
+
+    const SUPABASE_URL =
+      "https://vaszyhzgvtildxuxymcf.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_-2duftCVjNXzKUqL8DoYNg_L0GDnC6m";
 
 
-      const heure =
-        document
-          .getElementById(
-            "heure_ceremonie"
-          )
-          .value;
+    /* =========================================
+       INITIALISATION
+    ========================================= */
 
-
-      const lieu =
-        document
-          .getElementById(
-            "lieu"
-          )
-          .value
-          .trim();
-
-
-      const resultat =
-        await supabaseClient
-          .from("ceremonies")
-          .insert([
-            {
-              nom_ceremonie: nom,
-              titre: titre,
-              date_ceremonie: date,
-              heure_ceremonie: heure,
-              lieu: lieu,
-              statut: "Nouvelle"
-            }
-          ])
-          .select();
-
-
-      if (resultat.error) {
-
-        console.error(
-          resultat.error
-        );
-
-
-        afficherMessage(
-          "Erreur : " +
-          resultat.error.message,
-          "error"
-        );
-
-        return;
-      }
-
-
-      afficherMessage(
-        "✅ Cérémonie ajoutée avec succès.",
-        "success"
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
       );
 
 
-      formulaire.reset();
+    /* =========================================
+       VARIABLES
+    ========================================= */
+
+    let toutesLesConfirmations = [];
+
+    let ceremonieActuelleId = null;
 
 
-      chargerCeremonies();
+    /* =========================================
+       ELEMENTS
+    ========================================= */
+
+    const formulaire =
+      document.getElementById(
+        "ceremonieForm"
+      );
+
+    const message =
+      document.getElementById(
+        "message"
+      );
+
+    const ceremoniesBody =
+      document.getElementById(
+        "ceremoniesBody"
+      );
+
+    const loading =
+      document.getElementById(
+        "loading"
+      );
+
+    const btnAjouter =
+      document.getElementById(
+        "btnAjouter"
+      );
+
+
+    /* =========================================
+       ECHAPPER TEXTE HTML
+    ========================================= */
+
+    function echapper(texte) {
+
+      return String(
+        texte ?? ""
+      )
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
 
     }
-  );
 
 
-  /* =========================================
-     VOIR CONFIRMATIONS
-  ========================================= */
+    /* =========================================
+       MESSAGE
+    ========================================= */
 
-  async function voirConfirmations(
-    ceremonieId,
-    nomCeremonie
-  ) {
+    function afficherMessage(
+      texte,
+      type
+    ) {
 
-    const modal =
-      document.getElementById(
-        "confirmationsModal"
+      message.textContent =
+        texte;
+
+      message.className =
+        "message " + type;
+
+      message.style.display =
+        "block";
+
+      setTimeout(
+        function() {
+
+          message.style.display =
+            "none";
+
+        },
+        5000
       );
 
-
-    const body =
-      document.getElementById(
-        "confirmationsBody"
-      );
+    }
 
 
-    const titre =
-      document.getElementById(
-        "confirmationTitre"
-      );
+    /* =========================================
+       FORMAT DATE
+    ========================================= */
+
+    function formaterDate(
+      date
+    ) {
+
+      if (!date) {
+        return "";
+      }
+
+      const morceaux =
+        String(date).split("-");
+
+      if (
+        morceaux.length === 3
+      ) {
+
+        return (
+          morceaux[2] +
+          "/" +
+          morceaux[1] +
+          "/" +
+          morceaux[0]
+        );
+
+      }
+
+      return date;
+
+    }
 
 
-    const recherche =
-      document.getElementById(
-        "rechercheConfirmation"
-      );
+    /* =========================================
+       FORMAT HEURE
+    ========================================= */
+
+    function formaterHeure(
+      heure
+    ) {
+
+      if (!heure) {
+        return "";
+      }
+
+      return String(heure)
+        .substring(0, 5);
+
+    }
 
 
-    recherche.value = "";
+    /* =========================================
+       CHARGER CEREMONIES
+    ========================================= */
+
+    async function chargerCeremonies() {
+
+      loading.style.display =
+        "block";
+
+      ceremoniesBody.innerHTML =
+        "";
 
 
-    titre.innerHTML = `
+      try {
 
-      <p>
-
-        <strong>Cérémonie :</strong>
-
-        ${echapper(
-          nomCeremonie
-        )}
-
-      </p>
-
-    `;
-
-
-    body.innerHTML = `
-
-      <tr>
-
-        <td
-          colspan="5"
-          class="loading"
-        >
-          Chargement des confirmations...
-        </td>
-
-      </tr>
-
-    `;
+        const resultat =
+          await supabaseClient
+            .from("ceremonies")
+            .select(
+              "id, nom_ceremonie, titre, date_ceremonie, heure_ceremonie, lieu, statut"
+            )
+            .order(
+              "date_ceremonie",
+              {
+                ascending: true
+              }
+            );
 
 
-    document.getElementById(
-      "totalConfirmations"
-    ).textContent = "0";
+        console.log(
+          "Résultat cérémonies :",
+          resultat
+        );
 
 
-    document.getElementById(
-      "totalPresents"
-    ).textContent = "0";
+        loading.style.display =
+          "none";
 
 
-    document.getElementById(
-      "totalAbsents"
-    ).textContent = "0";
+        if (resultat.error) {
+
+          throw resultat.error;
+
+        }
 
 
-    modal.style.display = "block";
+        const ceremonies =
+          resultat.data || [];
 
 
-    const resultat =
-      await supabaseClient
-        .from("confirmations")
-        .select("*")
-        .eq(
-          "ceremonie_id",
-          ceremonieId
-        )
-        .order(
-          "created_at",
-          {
-            ascending: false
+        if (
+          ceremonies.length === 0
+        ) {
+
+          ceremoniesBody.innerHTML = `
+
+            <tr>
+
+              <td
+                colspan="8"
+                class="empty"
+              >
+
+                Aucune cérémonie enregistrée.
+
+              </td>
+
+            </tr>
+
+          `;
+
+          return;
+
+        }
+
+
+        ceremonies.forEach(
+          function(ceremonie) {
+
+            const ligne =
+              document.createElement(
+                "tr"
+              );
+
+
+            const id =
+              echapper(
+                ceremonie.id
+              );
+
+
+            const nom =
+              echapper(
+                ceremonie.nom_ceremonie
+              );
+
+
+            ligne.innerHTML = `
+
+              <td>
+                ${nom}
+              </td>
+
+              <td>
+                ${echapper(
+                  ceremonie.titre
+                )}
+              </td>
+
+              <td>
+                ${formaterDate(
+                  ceremonie.date_ceremonie
+                )}
+              </td>
+
+              <td>
+                ${formaterHeure(
+                  ceremonie.heure_ceremonie
+                )}
+              </td>
+
+              <td>
+                ${echapper(
+                  ceremonie.lieu
+                )}
+              </td>
+
+              <td>
+                ${echapper(
+                  ceremonie.statut || "Nouvelle"
+                )}
+              </td>
+
+              <td>
+
+                <button
+                  type="button"
+                  class="btn btn-orange"
+                  onclick="voirQR('${id}')"
+                >
+                  QR
+                </button>
+
+              </td>
+
+              <td>
+
+                <button
+                  type="button"
+                  class="btn btn-green"
+                  onclick="voirConfirmations('${id}', '${nom}')"
+                >
+                  Confirmations
+                </button>
+
+              </td>
+
+            `;
+
+
+            ceremoniesBody.appendChild(
+              ligne
+            );
+
           }
         );
 
 
-    const data = resultat.data;
+      } catch (erreur) {
 
-    const error = resultat.error;
-
-
-    if (error) {
-
-      console.error(error);
+        console.error(
+          "Erreur chargement cérémonies :",
+          erreur
+        );
 
 
-      body.innerHTML = `
+        loading.style.display =
+          "none";
 
-        <tr>
 
-          <td
-            colspan="5"
-            class="empty"
-          >
+        ceremoniesBody.innerHTML = `
 
-            Impossible de charger les confirmations.
+          <tr>
 
-            <br><br>
+            <td
+              colspan="8"
+              class="empty"
+            >
 
-            ${echapper(
-              error.message
-            )}
+              ❌ Erreur lors du chargement des cérémonies.
 
-          </td>
+              <br><br>
 
-        </tr>
+              ${echapper(
+                erreur.message ||
+                String(erreur)
+              )}
 
-      `;
+            </td>
 
-      return;
+          </tr>
+
+        `;
+
+      }
+
     }
 
 
-    toutesLesConfirmations =
-      data || [];
+    /* =========================================
+       AJOUTER CEREMONIE
+    ========================================= */
+
+    formulaire.addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
 
 
-    afficherStatistiques(
-      toutesLesConfirmations
-    );
+        btnAjouter.disabled =
+          true;
+
+        btnAjouter.textContent =
+          "Enregistrement...";
 
 
-    afficherListeConfirmations(
-      toutesLesConfirmations
-    );
-
-  }
-
-
-  /* =========================================
-     AFFICHER STATISTIQUES
-  ========================================= */
-
-  function afficherStatistiques(
-    confirmations
-  ) {
-
-    const total =
-      confirmations.length;
+        const nom =
+          document.getElementById(
+            "nom_ceremonie"
+          ).value.trim();
 
 
-    let presents = 0;
-
-    let absents = 0;
-
-
-    confirmations.forEach(
-      function(item) {
-
-        const presence =
-          String(
-            item.presence || ""
-          )
-          .toLowerCase()
-          .trim();
+        const titre =
+          document.getElementById(
+            "titre"
+          ).value.trim();
 
 
-        if (
-          presence === "oui" ||
-          presence === "présent" ||
-          presence === "present" ||
-          presence === "présente" ||
-          presence === "presente"
-        ) {
-
-          presents++;
-
-        }
+        const date =
+          document.getElementById(
+            "date_ceremonie"
+          ).value;
 
 
-        if (
-          presence === "non" ||
-          presence === "absent" ||
-          presence === "absente"
-        ) {
-
-          absents++;
-
-        }
-
-      }
-    );
+        const heure =
+          document.getElementById(
+            "heure_ceremonie"
+          ).value;
 
 
-    document.getElementById(
-      "totalConfirmations"
-    ).textContent = total;
+        const lieu =
+          document.getElementById(
+            "lieu"
+          ).value.trim();
 
 
-    document.getElementById(
-      "t
+        try {
+
+          const resultat =
+            await supabaseClient
+              .from("ceremonies")
+              .insert([
+                {
+                  nom_ceremonie: nom,
+                  titre: titre,
+                  date_ceremonie: date,
+                  heure_ceremonie: heure,
+                  lieu: lieu,
+                  statut: "Nouvelle"
+                }
+              ]);
+
+
+          if (resultat.error) {
+
+            throw resultat.error;
+
+          }
+
+
+          afficherMessage(
+            "✅ La cérémonie a été enregistrée avec succès.",
+            "success"
+          );
+
+
+          formulaire.reset();
+
+
+          await chargerCeremonies();
+
+
+        } catch (erreur) {
+
+          console.error(
+            "Erreur ajout cérémonie :",
+            erreur
+          );
+
+
+          afficherMessage(
+            "❌ Impossible d'enregistrer la cérémonie : " +
+            (
+              erreur.me
